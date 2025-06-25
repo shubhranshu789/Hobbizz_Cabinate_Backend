@@ -21,7 +21,6 @@ router.get("/get-events", async (req, res) => {
     const events = await LOCALEVENT.find(query)
       .populate("director", "name email")
       .populate("head", "name email")
-      .populate("council_members", "name position email phone")
       .sort({ createdAt: -1 }); // newest first
 
     const formattedEvents = events.map((chapter) => ({
@@ -52,7 +51,7 @@ router.get("/get-events", async (req, res) => {
 
 
 
-router.post("/create-chapter", requireLoginUser, async (req, res) => {
+router.post("/create-event", requireLoginUser, async (req, res) => {
   const clubModels = {
     "artclub": ARTCLUB
   };
@@ -86,10 +85,10 @@ router.post("/create-chapter", requireLoginUser, async (req, res) => {
     }
 
     const head = artClub.head;
-    const council_members = artClub.council;
+    
 
-    // Create new Chapter
-    const newChapter = new CHAPTER({
+    // Create new Event
+    const newEvent = new LOCALEVENT({
       title,
       description,
       date,
@@ -99,16 +98,39 @@ router.post("/create-chapter", requireLoginUser, async (req, res) => {
       status,
       head,
       director: director._id,
-      council_members
+      
     });
 
-    const savedChapter = await newChapter.save();
+    const savedEvent = await newEvent.save();
 
-    res.status(201).json({ message: "Chapter created successfully", chapter: savedChapter });
+    res.status(201).json({ message: "Event created successfully", event: savedEvent });
 
   } catch (error) {
-    console.error("Error creating chapter:", error);
-    res.status(500).json({ message: "Failed to create chapter", error: error.message });
+    console.error("Error creating event:", error);
+    res.status(500).json({ message: "Failed to create event", error: error.message });
+  }
+});
+
+
+// DELETE Event by ID
+router.delete("/delete-event/", async (req, res) => {
+  const eventId = req.query.eventId;
+
+  if (!eventId) {
+    return res.status(400).json({ error: "Event ID is required" });
+  }
+
+  try {
+    const deletedEvent = await LOCALEVENT.findByIdAndDelete(eventId);
+
+    if (!deletedEvent) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event deleted successfully", deletedEvent });
+  } catch (err) {
+    console.error("Error deleting event:", err);
+    res.status(500).json({ error: "Failed to delete event" });
   }
 });
 
