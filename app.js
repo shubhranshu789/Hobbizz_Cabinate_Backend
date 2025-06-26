@@ -32,6 +32,7 @@ app.use(require('./routes/chapter'))
 app.use(require('./routes/user'))
 app.use(require('./routes/artclub'))
 app.use(require('./routes/compitition'))
+app.use(require('./routes/school'))
 
 
 
