@@ -15,29 +15,35 @@ mongoose.connection.once("open", async () => {
     // Sample district data
     const districts = [
       {
-        district: "Varanasi",
+        district: "",
         
       },
       {
-        district: "Kanpur",
+        district: "Gurugram",
         
       },
       {
-        district: "Noida",
+        district: "Meerut",
         
       },
       {
-        district: "Agra",
+        district: "Gurgaon",
         
       },
-      {
-        district: "Ghaziabad",
+       {
+        district: "Muradabad",
         
       },
-      {
-        district: "Prayagraj",
+       {
+        district: "Faridabad",
         
       },
+       {
+        district: "Bulandshahr",
+        
+      },
+      
+
 
       
     ];

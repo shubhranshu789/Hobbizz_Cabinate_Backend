@@ -12,7 +12,7 @@ const artClubSchema = new mongoose.Schema(
     memberRequests: [{ type: ObjectId, ref: "CABINATE" }], 
     pendingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "CABINATE" }],
     director: { type: ObjectId, ref: "DIRECTOR", required: false },
-    ambassadors: { type: ObjectId, ref: "CABINATE" },
+    ambassadors: [{ type: ObjectId, ref: "CABINATE" }],
     ambassadorRequests: [{ type: ObjectId, ref: "CABINATE" }],
     chapterStatus: {
       type: String,

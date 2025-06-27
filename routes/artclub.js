@@ -574,7 +574,7 @@ router.get("/artclub/info", async (req, res) => {
     const schools = await SCHOOL.find({ district, club: 'artclub' });
 
     // Fetch students for this district and artclub
-    const students = await USER.find({ district, club: 'artclub' });
+    const students = await USER.find({ district });
 
 
     // Prepare response object

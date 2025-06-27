@@ -39,17 +39,16 @@ router.get("/get-school", async (req, res) => {
 
 // GET /get-students?club=artclub&district=Kanpur&school=St. Xavier's
 router.get("/get-students", async (req, res) => {
-  const { district } = req.query;
+  const { district, school } = req.query;
 
   // Validate required parameters
-  if (!district) {
+  if (!district || !school) {
     return res.status(400).json({ error: "club, district, and school parameters are required" });
   }
 
   try {
     // Find students with matching club, district, and school
     const students = await USER.find({
-      club,
       district,
       school
     }).select('name email phone school district club');
@@ -115,16 +114,16 @@ router.get("/get-correspondent", async (req, res) => {
 
 
 router.put("/make-captain", async (req, res) => {
-  const { district, club, school, userId } = req.body;
+  const { district, club, school, studentId } = req.body;
 
-  if (!district || !club || !school || !userId) {
+  if (!district || !club || !school || !studentId) {
     return res.status(400).json({ error: "district, club, school and userId are required" });
   }
 
   try {
     const updatedSchool = await SCHOOL.findOneAndUpdate(
       { district, club, school },
-      { captain: userId },
+      { captain: studentId },
       { new: true }
     ).populate("captain", "name email phone");
 
