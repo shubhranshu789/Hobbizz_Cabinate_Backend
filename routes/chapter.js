@@ -138,4 +138,32 @@ router.delete("/delete-event/", async (req, res) => {
 
 
 
+router.get("/event-details", async (req, res) => {
+  const event_id = req.query.event_id;
+
+  try {
+    if (!event_id) {
+      return res.status(400).json({ error: "event_id query parameter is required" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(event_id)) {
+      return res.status(400).json({ error: "Invalid event_id format" });
+    }
+
+    const event = await LOCALEVENT.findById(event_id)
+      .populate("head", "name email phone position")
+      .populate("director", "name email phone position");
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    res.status(200).json(event);  // <-- directly sending event object here
+  } catch (error) {
+    console.error("Error fetching event details:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 module.exports = router;
